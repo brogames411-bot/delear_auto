@@ -29,13 +29,32 @@ DEMO_PHOTOS = [
 ]
 
 DEMO_CARS = [
-    ("BMW 530d xDrive", "BMW", "530d", 2021, 64000, "3.0 дизель", "АКПП", 4_450_000, 4_620_000),
-    ("Mercedes-Benz E 200", "Mercedes-Benz", "E 200", 2020, 82000, "2.0 бензин", "АКПП", 3_580_000, 3_760_000),
-    ("Toyota Camry 70", "Toyota", "Camry", 2021, 97000, "2.5 бензин", "АКПП", 2_690_000, 2_790_000),
-    ("Audi A6 45 TFSI", "Audi", "A6", 2019, 112000, "2.0 бензин", "Робот", 3_120_000, 3_330_000),
-    ("BMW X5 xDrive30d", "BMW", "X5", 2020, 78000, "3.0 дизель", "АКПП", 5_740_000, 5_980_000),
-    ("Porsche Macan", "Porsche", "Macan", 2019, 91000, "2.0 бензин", "Робот", 4_760_000, 4_920_000),
+    ("LADA Granta", "LADA", "Granta", 2018, 118000, "1.6 бензин", "МКПП", 420000, 455000),
+    ("LADA Vesta", "LADA", "Vesta", 2017, 132000, "1.6 бензин", "МКПП", 465000, 505000),
+    ("LADA Priora", "LADA", "Priora", 2015, 145000, "1.6 бензин", "МКПП", 310000, 350000),
+    ("LADA Kalina", "LADA", "Kalina", 2016, 126000, "1.6 бензин", "МКПП", 335000, 370000),
+    ("Renault Logan", "Renault", "Logan", 2015, 154000, "1.6 бензин", "МКПП", 395000, 435000),
+    ("Renault Sandero", "Renault", "Sandero", 2016, 141000, "1.6 бензин", "МКПП", 445000, 485000),
+    ("Hyundai Solaris", "Hyundai", "Solaris", 2012, 176000, "1.4 бензин", "МКПП", 455000, 510000),
+    ("Kia Rio", "Kia", "Rio", 2012, 168000, "1.4 бензин", "МКПП", 470000, 525000),
+    ("Daewoo Nexia", "Daewoo", "Nexia", 2014, 139000, "1.5 бензин", "МКПП", 285000, 325000),
+    ("Chevrolet Aveo", "Chevrolet", "Aveo", 2013, 152000, "1.6 бензин", "МКПП", 365000, 405000),
+    ("Ford Focus", "Ford", "Focus", 2011, 184000, "1.6 бензин", "МКПП", 410000, 465000),
+    ("Volkswagen Polo", "Volkswagen", "Polo", 2013, 171000, "1.6 бензин", "МКПП", 485000, 540000),
+    ("Nissan Almera", "Nissan", "Almera", 2014, 146000, "1.6 бензин", "МКПП", 420000, 465000),
+    ("Skoda Fabia", "Skoda", "Fabia", 2011, 157000, "1.4 бензин", "МКПП", 350000, 395000),
+    ("Chevrolet Lacetti", "Chevrolet", "Lacetti", 2010, 198000, "1.6 бензин", "МКПП", 300000, 345000),
+    ("Opel Astra H", "Opel", "Astra", 2010, 191000, "1.6 бензин", "МКПП", 385000, 430000),
+    ("Toyota Corolla", "Toyota", "Corolla", 2007, 210000, "1.6 бензин", "МКПП", 470000, 520000),
+    ("Mazda 3", "Mazda", "3", 2008, 205000, "1.6 бензин", "МКПП", 460000, 515000),
+    ("Kia Spectra", "Kia", "Spectra", 2008, 185000, "1.6 бензин", "МКПП", 275000, 315000),
+    ("LADA 2114", "LADA", "2114", 2012, 165000, "1.6 бензин", "МКПП", 245000, 290000),
+    ("LADA 2115", "LADA", "2115", 2011, 173000, "1.6 бензин", "МКПП", 235000, 280000),
+    ("LADA Niva", "LADA", "Niva", 2010, 158000, "1.7 бензин", "МКПП", 430000, 475000),
+    ("Chery Amulet", "Chery", "Amulet", 2009, 149000, "1.6 бензин", "МКПП", 215000, 255000),
+    ("Geely MK", "Geely", "MK", 2011, 136000, "1.5 бензин", "МКПП", 265000, 305000),
 ]
+
 
 
 def _env_int(name: str, default: int) -> int:
@@ -163,38 +182,60 @@ async def _apify_rows() -> list[dict[str, Any]]:
     token = os.getenv("APIFY_TOKEN")
     if not token:
         raise RuntimeError("APIFY_TOKEN не задан")
-    city = os.getenv("AVITO_CITY_SLUG", "kislovodsk").strip() or "kislovodsk"
-    max_items = max(1, min(_env_int("AVITO_MAX_ITEMS", 40), 100))
-    max_pages = max(1, min(_env_int("AVITO_MAX_PAGES", 2), 10))
-    payload = {"citySlug": city, "maxItems": max_items, "maxPages": max_pages}
-    url = f"{APIFY_BASE}/acts/{os.getenv('AVITO_ACTOR_ID', ACTOR_ID)}/run-sync-get-dataset-items"
+    cities_raw = os.getenv("AVITO_CITIES") or os.getenv("AVITO_CITY_SLUG", "kislovodsk")
+    cities = [x.strip() for x in cities_raw.split(",") if x.strip()] or ["kislovodsk"]
+    max_items = max(1, min(_env_int("AVITO_MAX_ITEMS", 100), 100))
+    max_pages = max(1, min(_env_int("AVITO_MAX_PAGES", 5), 10))
+    actor_id = os.getenv("AVITO_ACTOR_ID", ACTOR_ID)
+    rows: list[dict[str, Any]] = []
     async with httpx.AsyncClient(timeout=180) as client:
-        response = await client.post(url, params={"token": token}, json=payload)
-        response.raise_for_status()
-        data = response.json()
-    return [row for row in data if isinstance(row, dict) and row.get("itemId") and parse_money(row.get("price"))]
+        for city in cities:
+            payload = {"citySlug": city, "maxItems": max_items, "maxPages": max_pages}
+            url = f"{APIFY_BASE}/acts/{actor_id}/run-sync-get-dataset-items"
+            try:
+                response = await client.post(url, params={"token": token}, json=payload)
+                response.raise_for_status()
+                data = response.json()
+                for row in data:
+                    if isinstance(row, dict) and row.get("itemId") and parse_money(row.get("price")):
+                        row["_market_city"] = city
+                        rows.append(row)
+            except Exception:
+                log.exception("Market sync failed for city %s", city)
+    unique: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        key = f"{row.get('_market_city','')}:{row.get('itemId')}"
+        unique[key] = row
+    return list(unique.values())
 
 
 async def seed_demo_market() -> int:
     async with SessionLocal() as db:
-        count = (await db.execute(select(MarketListing).where(MarketListing.status == "active"))).scalars().all()
-        if count:
-            return len(count)
+        active = (await db.execute(select(MarketListing).where(MarketListing.status == "active"))).scalars().all()
+        cheap = [x for x in active if x.listed_price <= 500_000]
+        if len(cheap) >= 24:
+            return len(active)
         now = datetime.utcnow()
+        existing_ids = {x.source_id for x in active if x.source in {"demo", "system"}}
+        added = 0
         for i, row in enumerate(DEMO_CARS):
+            source_id = f"budget-{i+1}"
+            if source_id in existing_ids:
+                continue
             title, brand, model, year, mileage, engine, gearbox, price, market_price = row
             db.add(MarketListing(
-                source="demo", source_id=f"demo-{i+1}", title=title, brand=brand, model=model,
+                source="system", source_id=source_id, title=title, brand=brand, model=model,
                 listed_price=price, market_price=market_price, year=year, mileage=mileage,
-                engine=engine, gearbox=gearbox, drivetrain="Полный" if i % 2 == 0 else "Передний",
-                fuel_type="Дизель" if "дизель" in engine else "Бензин", body_type="Седан" if i < 4 else "SUV",
-                generation="", condition=88 - i * 3, seller_name=["Алексей", "Сергей", "Максим", "Дмитрий", "Иван", "Антон"][i],
-                seller_type="private", location="Кисловодск", url="", photos=[DEMO_PHOTOS[i]],
-                description="Демонстрационное объявление. После подключения Apify оно будет заменено реальными объявлениями.",
+                engine=engine, gearbox=gearbox, drivetrain="Передний" if brand not in {"LADA", "Niva"} else "Передний",
+                fuel_type="Бензин", body_type="Седан", generation="", condition=max(55, 82 - i % 20),
+                seller_name=["Алексей", "Сергей", "Максим", "Дмитрий", "Иван", "Антон", "Роман", "Артём"][i % 8],
+                seller_type="private", location="Кисловодск", url="", photos=[DEMO_PHOTOS[i % len(DEMO_PHOTOS)]],
+                description="Автомобиль выставлен на внутриигровом рынке.",
                 last_seen=now, status="active",
             ))
+            added += 1
         await db.commit()
-        return len(DEMO_CARS)
+        return len(active) + added
 
 
 async def sync_avito_market() -> int:
@@ -205,7 +246,7 @@ async def sync_avito_market() -> int:
     prices_by_group: dict[tuple[str, int], list[int]] = {}
     prepared = []
     for row in rows:
-        title = normalize_text(row.get("title")) or "Автомобиль с Avito"
+        title = normalize_text(row.get("title")) or "Автомобиль"
         brand, model = derive_brand_model(title)
         year = int(row.get("year") or 0)
         price = parse_money(row.get("price")) or 0
@@ -223,7 +264,7 @@ async def sync_avito_market() -> int:
             market = parse_market_estimate(row.get("marketPriceEstimate")) or (int(statistics.median(group)) if group else fallback_market) or price
             photos = row.get("photos") if isinstance(row.get("photos"), list) else []
             photos = [str(x) for x in photos if x][:10]
-            seller = normalize_text(row.get("dealerName")) or ("Автосалон" if row.get("isShop") else "Авито-продавец")
+            seller = normalize_text(row.get("dealerName")) or ("Автосалон" if row.get("isShop") else "Частный продавец")
             existing = (await db.execute(select(MarketListing).where(MarketListing.source == "avito", MarketListing.source_id == source_id))).scalar_one_or_none()
             values = dict(
                 title=normalize_text(row.get("title")) or f"{brand} {model}", brand=brand, model=model,
@@ -232,7 +273,7 @@ async def sync_avito_market() -> int:
                 drivetrain=normalize_text(row.get("drivetrain"))[:30], fuel_type=normalize_text(row.get("fuelType"))[:30],
                 body_type=normalize_text(row.get("bodyType"))[:50], generation=normalize_text(row.get("generation"))[:80],
                 condition=listing_condition(row), seller_name=seller[:120], seller_type="company" if row.get("isShop") else "private",
-                location=normalize_text(row.get("locationAddress"))[:200], url=normalize_text(row.get("url"))[:500], photos=photos,
+                location=normalize_text(row.get("locationAddress"))[:200] or str(row.get("_market_city") or "Россия"), url=normalize_text(row.get("url"))[:500], photos=photos,
                 description=normalize_text(row.get("description"))[:5000], seller_rating=int(row.get("sellerRating")) if str(row.get("sellerRating") or "").isdigit() else None,
                 raw_json=json.dumps(row, ensure_ascii=False)[:50000], last_seen=now, status="active",
             )
@@ -244,22 +285,17 @@ async def sync_avito_market() -> int:
         await db.commit()
         stale = (await db.execute(select(MarketListing).where(MarketListing.status == "active", MarketListing.last_seen < now - timedelta(hours=48)))).scalars().all()
         for item in stale:
-            if item.source == "avito":
+            if item.source not in {"system", "demo"}:
                 item.status = "expired"
         await db.commit()
-    async with SessionLocal() as db:
-        demos = (await db.execute(select(MarketListing).where(MarketListing.source == "demo", MarketListing.status == "active"))).scalars().all()
-        for demo in demos:
-            demo.status = "expired"
-        await db.commit()
-    log.info("Avito sync: imported %s listings", len(prepared))
+    log.info("Market sync: imported %s listings", len(prepared))
     return len(prepared)
 
 
 async def market_sync_loop(stop_event: asyncio.Event) -> None:
     await seed_demo_market()
     if not os.getenv("APIFY_TOKEN"):
-        log.warning("APIFY_TOKEN не задан — оставлены демонстрационные объявления")
+        log.warning("APIFY_TOKEN не задан — работает встроенный рынок")
         return
     minutes = max(10, _env_int("AVITO_SYNC_MINUTES", 30))
     while not stop_event.is_set():

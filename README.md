@@ -22,13 +22,14 @@ Telegram Mini App: авторынок, осмотр, AI-торг, гараж, р
 - `PORT=8000`
 - `ALLOW_DEMO_MODE=1`
 
-Для реального авторынка и фотографий:
+Для большого рынка и фотографий:
 
 - `APIFY_TOKEN`
 - `AVITO_ACTOR_ID=getascraper~avito-auto-scraper`
 - `AVITO_CITY_SLUG=kislovodsk`
-- `AVITO_MAX_ITEMS=40`
-- `AVITO_MAX_PAGES=2`
+- `AVITO_CITIES=kislovodsk,pyatigorsk,stavropol`
+- `AVITO_MAX_ITEMS=100`
+- `AVITO_MAX_PAGES=5`
 - `AVITO_SYNC_MINUTES=30`
 
 Для Gemini:
@@ -38,15 +39,12 @@ Telegram Mini App: авторынок, осмотр, AI-торг, гараж, р
 
 ## Поведение без внешних ключей
 
-Приложение стартует и показывает демонстрационные объявления, даже если Apify/Gemini ещё не настроены. Без Gemini используется резервный диалог, без APIFY — demo-рынок.
+Приложение стартует и показывает демонстрационные объявления, даже если Apify/Gemini ещё не настроены. Без Gemini используется резервный диалог, без внешнего источника — встроенный резервный рынок.
 
 ## Важное
 
-Перед публичным запуском проверь права и условия использования источника Avito и фотографий, а также отключи `ALLOW_DEMO_MODE` после тестирования.
+Перед публичным запуском проверь права и условия использования внешнего источника данных и фотографий, а также отключи `ALLOW_DEMO_MODE` после тестирования.
 
 
-## Final3 deployment
-Use the newest /start button with ?v=final3 after redeploy.
-
-## Previous deployment
-After redeploy, send /start in Telegram and open the newest button. Old Telegram messages may keep an older ?v= URL.
+## Final4 deployment
+After redeploy, send /start in Telegram and open the newest button. Old Telegram messages may keep an older URL.

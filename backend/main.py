@@ -108,7 +108,6 @@ def listing_json(x: MarketListing) -> dict:
     delta = round((market - x.listed_price) / market * 100, 1)
     return {
         "id": x.id,
-        "source": x.source,
         "title": x.title,
         "name": x.title,
         "brand": x.brand,
@@ -128,7 +127,6 @@ def listing_json(x: MarketListing) -> dict:
         "seller_name": x.seller_name,
         "seller_type": x.seller_type,
         "location": x.location,
-        "url": x.url,
         "photos": x.photos or [],
         "description": x.description,
         "seller_rating": x.seller_rating,
@@ -415,40 +413,87 @@ async def repair(request: Request, car_id: int, telegram_id: int | None = None):
         return {"balance": p.balance, "cost": cost, "car": car_json(c)}
 
 
+@app.get("/api/market")
 @app.get("/api/market/avito")
-async def market_avito(request: Request, telegram_id: int | None = None, source: str | None = None):
+async def market_catalog(
+    request: Request,
+    telegram_id: int | None = None,
+    min_price: int = 0,
+    max_price: int | None = None,
+    brand: str | None = None,
+    year_from: int | None = None,
+    year_to: int | None = None,
+    gearbox: str | None = None,
+    body_type: str | None = None,
+    sort: str = "bargain",
+    limit: int = 100,
+):
+    tg_id, _ = resolve_user(request, telegram_id)
+    async with SessionLocal() as db:
+        player = await get_player(db, tg_id)
+        if not player:
+            raise HTTPException(404, "Игрок не найден")
+        active_rows = (await db.execute(select(MarketListing).where(MarketListing.status == "active"))).scalars().all()
+        if len([x for x in active_rows if x.listed_price <= 500_000]) < 24:
+            await seed_demo_market()
+            active_rows = (await db.execute(select(MarketListing).where(MarketListing.status == "active"))).scalars().all()
+        if os.getenv("APIFY_TOKEN"):
+            fresh = [x for x in active_rows if x.source not in {"system", "demo"}]
+            if not fresh:
+                try:
+                    await asyncio.wait_for(sync_avito_market(), timeout=60)
+                except Exception:
+                    log.exception("One-shot market refresh failed")
+        query = select(MarketListing).where(MarketListing.status == "active")
+        # По умолчанию показываем только то, что игрок реально может купить.
+        effective_max = player.balance if max_price is None else max(0, max_price)
+        if min_price > 0:
+            query = query.where(MarketListing.listed_price >= min_price)
+        if effective_max > 0:
+            query = query.where(MarketListing.listed_price <= effective_max)
+        if brand and brand.lower() != "все":
+            query = query.where(MarketListing.brand.ilike(f"%{brand.strip()}%"))
+        if year_from:
+            query = query.where(MarketListing.year >= year_from)
+        if year_to:
+            query = query.where(MarketListing.year <= year_to)
+        if gearbox and gearbox.lower() != "все":
+            query = query.where(MarketListing.gearbox.ilike(f"%{gearbox.strip()}%"))
+        if body_type and body_type.lower() != "все":
+            query = query.where(MarketListing.body_type.ilike(f"%{body_type.strip()}%"))
+        if sort == "price_asc":
+            query = query.order_by(MarketListing.listed_price.asc())
+        elif sort == "year_desc":
+            query = query.order_by(MarketListing.year.desc(), MarketListing.listed_price.asc())
+        elif sort == "mileage_asc":
+            query = query.order_by(MarketListing.mileage.asc())
+        else:
+            # Лучшие варианты по разнице между рынком и ценой объявления.
+            query = query.order_by(desc(MarketListing.market_price - MarketListing.listed_price), MarketListing.last_seen.desc())
+        rows = (await db.execute(query.limit(max(1, min(limit, 100))))).scalars().all()
+        return [listing_json(x) for x in rows]
+
+
+@app.get("/api/market/filters")
+async def market_filters(request: Request, telegram_id: int | None = None):
     tg_id, _ = resolve_user(request, telegram_id)
     async with SessionLocal() as db:
         if not await get_player(db, tg_id):
             raise HTTPException(404, "Игрок не найден")
-        active_rows = (await db.execute(select(MarketListing).where(MarketListing.status == "active"))).scalars().all()
-        active_avito = [x for x in active_rows if x.source == "avito"]
-        # Never leave the player with an empty market on first launch.
-        # Seed the demo market immediately, then try a one-shot Avito sync
-        # when an Apify token is configured.
-        if not active_rows:
-            await seed_demo_market()
-            active_rows = (await db.execute(select(MarketListing).where(MarketListing.status == "active"))).scalars().all()
-            active_avito = [x for x in active_rows if x.source == "avito"]
-        if os.getenv("APIFY_TOKEN") and not active_avito:
-            try:
-                await asyncio.wait_for(sync_avito_market(), timeout=30)
-            except Exception:
-                log.exception("One-shot Avito market refresh failed")
-        query = select(MarketListing).where(MarketListing.status == "active")
-        if source in {"avito", "demo"}:
-            query = query.where(MarketListing.source == source)
-        rows = (await db.execute(query.order_by(desc(MarketListing.last_seen)).limit(100))).scalars().all()
-        return [listing_json(x) for x in rows]
+        rows = (await db.execute(select(MarketListing).where(MarketListing.status == "active"))).scalars().all()
+        brands = sorted({x.brand for x in rows if x.brand and x.brand != "Unknown"})
+        gearboxes = sorted({x.gearbox for x in rows if x.gearbox and x.gearbox != "Не указано"})
+        bodies = sorted({x.body_type for x in rows if x.body_type})
+        return {"brands": brands, "gearboxes": gearboxes, "body_types": bodies, "min_year": min((x.year for x in rows if x.year), default=2000), "max_year": max((x.year for x in rows if x.year), default=2026)}
 
 
 @app.get("/api/market/status")
 async def market_status():
     async with SessionLocal() as db:
         rows = (await db.execute(select(MarketListing).where(MarketListing.status == "active"))).scalars().all()
-        active_avito = [x for x in rows if x.source == "avito"]
-        last = max((x.last_seen for x in active_avito if x.last_seen), default=None)
-        return {"active": len(rows), "avito_active": len(active_avito), "last_sync": last.isoformat() if last else None, "city": os.getenv("AVITO_CITY_SLUG", "kislovodsk"), "source_ready": bool(os.getenv("APIFY_TOKEN"))}
+        external = [x for x in rows if x.source not in {"system", "demo"}]
+        last = max((x.last_seen for x in external if x.last_seen), default=None)
+        return {"active": len(rows), "external_active": len(external), "last_sync": last.isoformat() if last else None, "cities": os.getenv("AVITO_CITIES", os.getenv("AVITO_CITY_SLUG", "kislovodsk")).split(","), "source_ready": bool(os.getenv("APIFY_TOKEN"))}
 
 
 @app.post("/api/market/refresh")
@@ -489,7 +534,7 @@ async def market_buy(data: MarketBuyIn, request: Request):
                   engine=item.engine or "Не указано", gearbox=item.gearbox or "Не указано", condition=item.condition,
                   body=item.condition, engine_state=item.condition, gearbox_state=item.condition,
                   suspension=item.condition, electronics=item.condition, market_price=item.market_price,
-                  asking_price=price, purchase_price=price, damage_note=f"Источник: Avito • {item.seller_name}",
+                  asking_price=price, purchase_price=price, damage_note=f"Продавец: {item.seller_name}",
                   photo=(item.photos or [None])[0])
         db.add(car); item.status = "sold"
         await db.commit(); await db.refresh(car)
