@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08090b">
+<title>AUTO DEALER • FINAL</title>
+<link rel="icon" href="/favicon.svg">
+
+<style>
+:root{--bg:#07080a;--panel:#111317;--panel2:#17191e;--line:#24272e;--muted:#858b96;--text:#f5f7fa;--green:#24d35c;--green2:#1cad4b;--blue:#2f89ff;--gold:#f5c14b;--pink:#ff4f8b;--red:#ff5566;--shadow:0 12px 34px rgba(0,0,0,.28)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;min-height:100%;overflow-x:hidden}
+body{padding-bottom:82px}.app{width:min(100%,620px);margin:0 auto;padding:12px 12px 18px}.topbar{display:flex;align-items:center;gap:10px;padding:6px 0 12px;position:sticky;top:0;background:linear-gradient(var(--bg) 82%,rgba(7,8,10,0));z-index:5}
+.iconbtn{width:40px;height:40px;border:1px solid var(--line);background:var(--panel);border-radius:14px;color:#fff;font-size:20px}.brand{flex:1}.brand b{font-size:17px;display:block}.brand span{font-size:11px;color:var(--muted)}
+.balance{background:#151820;border:1px solid #2a2e36;border-radius:14px;padding:8px 11px;text-align:right;min-width:112px}.balance small{display:block;color:var(--muted);font-size:10px}.balance strong{font-size:14px}
+.profile{display:flex;gap:8px;overflow:auto;padding-bottom:5px}.pill{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:9px 11px;font-weight:800;white-space:nowrap;font-size:12px}.pill b{color:#fff}.pill span{color:var(--muted);font-weight:600}
+.banner{border:1px solid var(--line);border-radius:19px;padding:14px 15px;margin:11px 0;background:linear-gradient(135deg,#1b1d23,#111317);box-shadow:var(--shadow)}.banner.gold{background:linear-gradient(135deg,#322714,#17120b);border-color:#5b4211}.banner.pink{background:linear-gradient(135deg,#351520,#171015);border-color:#5b2438}.banner .kicker{font-size:11px;color:#bdc2ca;margin-bottom:3px}.banner h3{margin:0 0 3px;font-size:16px}.banner p{margin:0;color:#a7adb7;font-size:11px;line-height:1.35}
+.segment{display:grid;grid-template-columns:1fr 1fr;background:#191b20;border:1px solid var(--line);padding:3px;border-radius:14px;margin:13px 0}.segment button{background:transparent;border:0;color:#8e949d;padding:10px;border-radius:11px;font-weight:900}.segment button.active{background:#5c5d62;color:#fff}
+.section{display:flex;justify-content:space-between;align-items:end;margin:16px 2px 9px}.section h2{font-size:17px;margin:0}.section span{font-size:11px;color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:19px;margin:10px 0;padding:12px;box-shadow:0 8px 26px rgba(0,0,0,.16)}.car-card{overflow:hidden;padding:0}.photo{width:100%;height:205px;display:block;object-fit:cover;background:#0d0f12}.car-body{padding:12px}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.title{font-size:16px;font-weight:900;margin:1px 0}.muted{color:var(--muted)}.tiny{font-size:10px}.specs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.tag{background:#20242b;border:1px solid #2c313a;color:#c6cbd4;border-radius:10px;padding:5px 8px;font-size:10px;font-weight:800}.tag.good{background:rgba(36,211,92,.09);color:#64e58b;border-color:rgba(36,211,92,.25)}.tag.gold{background:rgba(245,193,75,.09);color:#f6ca6b;border-color:rgba(245,193,75,.25)}.tag.pink{background:rgba(255,79,139,.09);color:#ff78a8;border-color:rgba(255,79,139,.25)}
+.pricebox{margin:10px 0 8px}.price{font-size:23px;font-weight:950;letter-spacing:-.5px}.market{font-size:11px;color:#9ca2ac;margin-top:2px}.market strong{color:#e5e8ed}.deal{font-size:11px;font-weight:900}.deal.up{color:var(--green)}.deal.flat{color:#b9bec7}.seller{display:flex;gap:8px;align-items:center;font-size:11px;color:#b5bac4}.avatar{width:30px;height:30px;border-radius:10px;background:#23272f;display:grid;place-items:center;font-weight:900}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.btn{width:100%;border:0;border-radius:14px;padding:13px 11px;background:#252932;color:#fff;font-weight:900;font-size:13px}.btn.primary{background:var(--green);color:#041007}.btn.blue{background:var(--blue)}.btn.ghost{background:transparent;border:1px solid var(--line)}.btn.danger{background:#311519;color:#ff8792}.btn:disabled{opacity:.5}
+.hero{padding:18px;text-align:center}.hero .big{font-size:42px;margin:6px 0}.capital{font-size:28px;font-weight:950}.progress{height:6px;background:#262a31;border-radius:99px;overflow:hidden;margin-top:9px}.progress i{display:block;height:100%;background:var(--green);border-radius:99px;width:40%}
+.empty{text-align:center;padding:28px 16px;color:var(--muted)}.empty .emoji{font-size:42px;margin-bottom:8px}.loader{padding:40px 12px;text-align:center;color:var(--muted)}
+.detail-photo{width:100%;height:235px;object-fit:cover;border-radius:17px;background:#0d0f12}.backline{display:flex;align-items:center;justify-content:space-between;margin:2px 0 10px}.back{border:0;background:transparent;color:#fff;font-weight:900;padding:8px 0}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat{background:#191c22;border:1px solid var(--line);border-radius:14px;padding:10px}.stat small{display:block;color:var(--muted);font-size:10px}.stat b{font-size:13px}.chat{max-height:52vh;overflow:auto;padding:4px 1px}.msg{display:flex;margin:8px 0}.msg.user{justify-content:flex-end}.bubble{max-width:86%;padding:10px 12px;border-radius:14px;background:#262a32;font-size:13px;line-height:1.35;white-space:pre-wrap}.msg.user .bubble{background:#285d3a}.chatbar{display:grid;grid-template-columns:1fr 46px;gap:7px;margin-top:9px}.chatbar input,.field{width:100%;border:1px solid #2b3039;background:#0d0f13;color:#fff;border-radius:13px;padding:12px 13px;font-size:14px;outline:none}.chatbar input:focus,.field:focus{border-color:#4b525e}
+.plate{background:linear-gradient(#f8f8f8,#d9d9d9);color:#111;border:3px solid #333;border-radius:7px;padding:9px 9px 9px 14px;font-size:27px;font-weight:950;letter-spacing:3px;display:inline-flex;align-items:center;gap:9px}.plate .reg{font-size:10px;letter-spacing:0;border-left:2px solid #777;padding-left:7px}.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(10,11,14,.93);backdrop-filter:blur(16px);border-top:1px solid var(--line);z-index:20;padding:8px 10px calc(8px + env(safe-area-inset-bottom))}.bottom-inner{width:min(100%,620px);margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.nav{border:0;background:transparent;color:#777f89;font-size:10px;padding:7px 3px;border-radius:12px;font-weight:800}.nav b{display:block;font-size:18px;margin-bottom:2px}.nav.active{color:#fff;background:#191c21}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;z-index:40;background:#f7f8fa;color:#101214;padding:11px 14px;border-radius:13px;font-weight:800;font-size:12px;box-shadow:var(--shadow);max-width:90%;display:none}.toast.show{display:block}.danger-text{color:#ff7f8a}.ok-text{color:#69e591}.server-note{font-size:10px;color:#666d77;text-align:center;margin-top:12px}
+@media (min-width:620px){.app{padding-left:16px;padding-right:16px}.photo{height:235px}.detail-photo{height:300px}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="toast" id="toast"></div>
+<div class="bottom"><div class="bottom-inner">
+  <button class="nav active" id="nav-home" onclick="home()"><b>⌂</b>Главная</button>
+  <button class="nav" id="nav-market" onclick="marketCars()"><b>🚘</b>Авторынок</button>
+  <button class="nav" id="nav-garage" onclick="garage()"><b>▣</b>Гараж</button>
+  <button class="nav" id="nav-profile" onclick="profilePage()"><b>●</b>Профиль</button>
+</div></div>
+<script>
+(() => {
+  const app = document.getElementById('app');
+  const toastEl = document.getElementById('toast');
+  let tg = null;
+  const demoUid = (() => { try { return Number(localStorage.getItem('ad_demo_uid') || '900000001'); } catch { return 900000001; }})();
+  try { localStorage.setItem('ad_demo_uid', String(demoUid)); } catch {}
+
+  function loadTelegramWebApp(timeoutMs = 5000) {
+    return new Promise(resolve => {
+      if (window.Telegram?.WebApp) { tg = window.Telegram.WebApp; return resolve(true); }
+      const script = document.createElement('script');
+      script.src = 'https://telegram.org/js/telegram-web-app.js?62';
+      script.async = true;
+      let done = false;
+      const finish = ok => { if (done) return; done = true; tg = window.Telegram?.WebApp || null; resolve(!!ok && !!tg); };
+      script.onload = () => finish(true);
+      script.onerror = () => finish(false);
+      document.head.appendChild(script);
+      setTimeout(() => finish(false), timeoutMs);
+    });
+  }
+  const ru = new Intl.NumberFormat('ru-RU');
+  const fmt = n => `${ru.format(Math.max(0, Number(n || 0)))} ₽`;
+  const km = n => `${ru.format(Number(n || 0))} км`;
+  const esc = v => String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const photo = (url, alt='Автомобиль') => url ? `<img class="photo" loading="lazy" src="${esc(url)}" alt="${esc(alt)}" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">` : '';
+  const photoFallback = `<div class="photo" style="display:${photo ? 'none' : 'grid'};place-items:center;font-size:54px">🚘</div>`;
+  const toast = (msg) => { toastEl.textContent = msg; toastEl.classList.add('show'); setTimeout(() => toastEl.classList.remove('show'), 2600); };
+  const alertUser = (msg) => { try { tg?.showAlert ? tg.showAlert(msg) : toast(msg); } catch { toast(msg); } };
+  const getContext = () => {
+    const user = tg?.initDataUnsafe?.user || null;
+    return { id: user?.id ? Number(user.id) : demoUid, name: user ? (user.username || user.first_name || 'player') : 'demo_player', initData: tg?.initData || '' };
+  };
+  const headers = () => { const h = {'Content-Type':'application/json'}; const d = getContext().initData; if (d) h['X-Telegram-Init-Data'] = d; return h; };
+  async function api(path, options={}) {
+    const opts = {...options, cache:'no-store', headers:{...headers(), ...(options.headers || {})}};
+    const r = await fetch(path, opts);
+    let data = {}; try { data = await r.json(); } catch { data = {}; }
+    if (!r.ok) throw new Error(data.detail || data.message || `Ошибка ${r.status}`);
+    return data;
+  }
+  const post = (path, data={}) => api(path, {method:'POST', body:JSON.stringify(data)});
+  let player = null, current = null, marketCache = [], npc = null, chatState = {history:[], agreed:null};
+
+  function setNav(active){ document.querySelectorAll('.nav').forEach(x => x.classList.remove('active')); document.getElementById(`nav-${active}`)?.classList.add('active'); }
+  function topbar(title='AUTO DEALER'){ return `<div class="topbar"><button class="iconbtn" onclick="home()">☰</button><div class="brand"><b>🚗 ${esc(title)}</b><span>Карьерa перекупа</span></div><div class="balance"><small>Баланс</small><strong>${fmt(player?.balance)}</strong></div></div>`; }
+  function render(content, active='home', title='AUTO DEALER'){ setNav(active); app.innerHTML = topbar(title) + content; window.scrollTo({top:0,behavior:'smooth'}); }
+  function chip(text, cls=''){ return `<span class="tag ${cls}">${esc(text)}</span>`; }
+
+  async function init(){
+    render(`<div class="loader">🚘<br><br>Загружаем гараж и авторынок…</div>`);
+    try {
+      const c = getContext();
+      player = await post('/api/player', {telegram_id:c.id, username:c.name, init_data:c.initData || null});
+      home();
+    } catch (e) {
+      app.innerHTML = topbar('AUTO DEALER') + `<div class="card empty"><div class="emoji">⚠️</div><h3>Не удалось загрузить профиль</h3><p>${esc(e.message)}</p><button class="btn primary" onclick="init()">Повторить</button><div class="server-note">Открой игру через кнопку Telegram.</div></div>`;
+    }
+  }
+
+  function home(){
+    render(`
+      <div class="profile"><div class="pill">Ур. <b>${player.level}</b> <span>• ${Math.min(100, (player.reputation % 5) * 20)}%</span></div><div class="pill">⭐ <b>${player.reputation}</b></div><div class="pill">🚘 <b>${player.cars}</b> машин</div><div class="pill">🔢 <b>${player.numbers}</b></div></div>
+      <div class="banner gold"><div class="kicker">⚡ БЫСТРЫЙ СТАРТ</div><h3>Начни с 500 000 ₽</h3><p>Ищи выгодные машины, торгуйся с продавцами и увеличивай капитал.</p></div>
+      <div class="banner pink"><div class="kicker">🤖 ЖИВЫЕ ПРОДАВЦЫ</div><h3>Торг с Gemini</h3><p>У каждого продавца свой характер и минимальная цена сделки.</p></div>
+      <div class="section"><h2>Сегодня в игре</h2><span>автоматически</span></div>
+      <div class="stats"><div class="stat"><small>Капитал</small><b>${fmt(player.balance)}</b></div><div class="stat"><small>Уровень</small><b>${player.level}</b></div><div class="stat"><small>Репутация</small><b>${player.reputation}</b></div><div class="stat"><small>Авто в гараже</small><b>${player.cars}</b></div></div>
+      <div class="progress"><i style="width:${Math.max(8,Math.min(100,(player.reputation%5)*20+8))}%"></i></div>
+      <div class="segment"><button class="active" onclick="marketCars()">Авторынок</button><button onclick="garage()">Гараж</button></div>
+      <div class="btns"><button class="btn primary" onclick="marketCars()">🚘 Смотреть машины</button><button class="btn" onclick="findCar()">🔎 Найти самому</button></div>
+      <div class="btns"><button class="btn" onclick="numberGet()">🚔 Получить номер</button><button class="btn" onclick="offers()">🤝 Сделки</button></div>
+      <div class="server-note">Рынок обновляется автоматически. Avito — источник внутриигровых объявлений.</div>
+    `, 'home');
+  }
+
+  function loading(title){ render(`<div class="loader">${title}<br><br>Подождите…</div>`); }
+
+  async function marketCars(){
+    loading('🏪 Загружаем авторынок…');
+    try {
+      marketCache = await api(`/api/market/avito?telegram_id=${getContext().id}`);
+      renderMarket();
+    } catch(e){ alertUser(e.message); home(); }
+  }
+
+  function renderMarket(){
+    const avitoCount = marketCache.filter(x => x.source==='avito').length;
+    let html = `<div class="row"><div><div class="section" style="margin-top:0"><h2>🏪 Авторынок</h2></div><div class="muted tiny">${avitoCount ? `Avito: ${avitoCount} свежих объявлений` : 'Пока показываем демонстрационные лоты'}</div></div>${avitoCount ? chip('AVITO','good') : chip('DEMO','gold')}</div>`;
+    if(!marketCache.length){ html += `<div class="card empty"><div class="emoji">🚘</div><h3>Рынок пуст</h3><p>Проверь APIFY_TOKEN и попробуй обновить рынок.</p></div>`; }
+    else marketCache.forEach(x => { html += marketCard(x); });
+    render(html,'market','Авторынок');
+  }
+
+  function marketCard(x){
+    const delta = Number(x.deal_delta || 0);
+    const img = x.photos?.[0];
+    return `<div class="card car-card">
+      ${img ? `<img class="photo" loading="lazy" src="${esc(img)}" alt="${esc(x.title)}" onerror="this.outerHTML='<div class=\'photo\' style=\'display:grid;place-items:center;font-size:54px\'>🚘</div>'">` : `<div class="photo" style="display:grid;place-items:center;font-size:54px">🚘</div>`}
+      <div class="car-body">
+        <div class="row"><div class="title">${esc(x.title)}</div>${chip(x.source==='avito'?'Avito':'Demo',x.source==='avito'?'good':'gold')}</div>
+        <div class="specs">${x.year?chip(x.year):''}${chip(x.mileage?km(x.mileage):'Пробег не указан')}${chip(x.gearbox||'КПП —')}${x.body_type?chip(x.body_type):''}</div>
+        <div class="pricebox"><div class="price">${fmt(x.listed_price)}</div><div class="market">Рынок: <strong>${fmt(x.market_price)}</strong></div></div>
+        <div class="deal ${delta>0?'up':'flat'}">${delta>0 ? `🔥 На ${delta}% ниже рынка` : 'Цена близка к рынку'}</div>
+        <div class="seller" style="margin-top:9px"><div class="avatar">${x.seller_type==='company'?'🏢':'👤'}</div><div><b>${esc(x.seller_name||'Продавец')}</b><br><span>${esc(x.location||'Россия')}</span></div></div>
+        <div class="btns"><button class="btn primary" onclick="openMarketListing(${x.id})">🤖 Торг</button>${x.url?`<button class="btn" onclick="openLink('${encodeURIComponent(x.url)}')">↗ Avito</button>`:`<button class="btn" onclick="openMarketListing(${x.id})">Подробнее</button>`}</div>
+      </div>
+    </div>`;
+  }
+
+  function openLink(encoded){ try { const url=decodeURIComponent(encoded); tg?.openLink ? tg.openLink(url) : window.open(url,'_blank'); } catch { toast('Не удалось открыть ссылку'); } }
+
+  function openMarketListing(id){
+    const x=marketCache.find(v=>v.id===id); if(!x){return marketCars();}
+    current=x; chatState={history:[],agreed:null};
+    const img=x.photos?.[0];
+    render(`<div class="backline"><button class="back" onclick="marketCars()">← Авторынок</button>${chip(x.source==='avito'?'AVITO':'DEMO',x.source==='avito'?'good':'gold')}</div>
+      <div class="card">${img?`<img class="detail-photo" src="${esc(img)}" alt="${esc(x.title)}" onerror="this.style.opacity=.2">`:''}<div class="title" style="margin-top:10px">${esc(x.title)}</div><div class="specs">${x.year?chip(x.year):''}${x.mileage?chip(km(x.mileage)):''}${x.engine?chip(x.engine):''}${x.gearbox?chip(x.gearbox):''}</div><div class="price">${fmt(x.listed_price)}</div><div class="market">Рыночная стоимость: <strong>${fmt(x.market_price)}</strong></div><div class="stats" style="margin-top:10px"><div class="stat"><small>Состояние</small><b>${esc(x.condition_text)}</b></div><div class="stat"><small>Продавец</small><b>${esc(x.seller_name||'Avito')}</b></div></div><div class="seller" style="margin-top:10px"><div class="avatar">🤖</div><div><b>AI-продавец</b><br><span>${esc(x.seller_type==='company'?'автосалон':'частное лицо')}</span></div></div></div>
+      <div class="card"><div class="row"><div><b>💬 Торг с продавцом</b><div class="muted tiny">Ответы живые, цена контролируется сервером</div></div>${x.seller_rating?chip('★ '+x.seller_rating,'gold'):''}</div><div id="chat" class="chat">${chatMsg('model',`Здравствуйте! Машина ${x.title}. Цена в объявлении ${fmt(x.listed_price)}. Что хотите узнать?`)}</div><div class="chatbar"><input id="chatInput" maxlength="500" placeholder="Напишите: «Дам 2,9 млн»" onkeydown="if(event.key==='Enter')sendChat()"><button class="btn primary" onclick="sendChat()">➤</button></div></div>`, 'market','Торг');
+  }
+
+  function chatMsg(role,text){ return `<div class="msg ${role==='user'?'user':''}"><div class="bubble">${esc(text)}</div></div>`; }
+  function appendChat(role,text){ const el=document.getElementById('chat'); if(!el)return; el.insertAdjacentHTML('beforeend',chatMsg(role,text)); el.scrollTop=el.scrollHeight; }
+
+  async function sendChat(){
+    if(!current)return; const input=document.getElementById('chatInput'); if(!input)return; const text=input.value.trim(); if(!text)return;
+    input.value=''; input.disabled=true; appendChat('user',text); chatState.history.push({role:'user',text});
+    try{
+      const j=await post('/api/market/chat',{telegram_id:getContext().id,listing_id:current.id,message:text,history:chatState.history.slice(-8),init_data:getContext().initData||null});
+      appendChat('model',j.reply); chatState.history.push({role:'model',text:j.reply});
+      if(j.counter_price){ appendChat('model',`Встречное предложение: ${fmt(j.counter_price)}`); chatState.history.push({role:'model',text:`Встречное предложение: ${fmt(j.counter_price)}`}); }
+      if(j.accepted && j.agreed_price){
+        chatState.agreed=Number(j.agreed_price);
+        appendChat('model',`✅ Готов отдать за ${fmt(chatState.agreed)}.`);
+        const bar=document.getElementById('chat'); bar.insertAdjacentHTML('beforeend',`<div class="card"><div class="ok-text"><b>Цена согласована: ${fmt(chatState.agreed)}</b></div><button class="btn primary" style="margin-top:8px" onclick="buyAgreed()">💰 Купить</button></div>`); bar.scrollTop=bar.scrollHeight;
+      }
+    }catch(e){ appendChat('model',`⚠️ ${e.message}`); }
+    finally{ input.disabled=false; input.focus(); }
+  }
+
+  async function buyAgreed(){
+    if(!current||!chatState.agreed)return;
+    try{ const j=await post('/api/market/buy',{telegram_id:getContext().id,listing_id:current.id,amount:chatState.agreed,init_data:getContext().initData||null}); if(!j.ok){ appendChat('model',j.reply||'Продавец отказал.'); return; } player.balance=j.balance; player.cars=(player.cars||0)+1; player.reputation+=1; alertUser(`Сделка завершена!\nМашина куплена за ${fmt(j.agreed_price)}.`); garage(); }
+    catch(e){alertUser(e.message);}
+  }
+
+  async function findCar(){
+    loading('🔎 Ищем машину у частника…');
+    try{ const j=await post('/api/search-car',{telegram_id:getContext().id,username:getContext().name,init_data:getContext().initData||null}); npc=j.listing; openNpc(); }
+    catch(e){alertUser(e.message);home();}
+  }
+  function openNpc(){
+    const x=npc; chatState={history:[],agreed:null};
+    render(`<div class="backline"><button class="back" onclick="home()">← Назад</button>${chip(x.seller_mood,'pink')}</div><div class="card">${x.photo?`<img class="detail-photo" src="${esc(x.photo)}" alt="${esc(x.name)}">`:''}<div class="title" style="margin-top:9px">${esc(x.name)}</div><div class="specs">${chip(x.year)}${chip(km(x.mileage))}${chip(x.engine)}${chip(x.gearbox)}</div><div class="pricebox"><div class="price">${fmt(x.asking_price)}</div><div class="market">Рынок: <strong>${fmt(x.market_price)}</strong></div></div><div class="seller" style="margin-top:9px"><div class="avatar">👤</div><div><b>${esc(x.seller_name)}</b><br><span>${esc(x.seller_mood)} • срочность ${esc(x.seller_urgency)}</span></div></div></div><div class="stats"><div class="stat"><small>Состояние</small><b>${esc(x.condition_text)}</b></div><div class="stat"><small>Кузов</small><b>${x.states.body}%</b></div><div class="stat"><small>Двигатель</small><b>${x.states.engine}%</b></div><div class="stat"><small>Подвеска</small><b>${x.states.suspension}%</b></div></div><div class="btns"><button class="btn" onclick="inspectNpc()">🔍 Полный осмотр 5 000 ₽</button><button class="btn primary" onclick="openNpcChat()">🤖 Торг</button></div>`, 'home','Машина');
+  }
+  async function inspectNpc(){
+    try{ const j=await api(`/api/npc/inspect?listing_id=${npc.id}&telegram_id=${getContext().id}`,{method:'POST'}); player.balance=j.balance; alertUser(`Осмотр: кузов ${j.inspection.body}%, двигатель ${j.inspection.engine}%.\n${j.inspection.note}`); openNpc(); }catch(e){alertUser(e.message);}
+  }
+  function openNpcChat(){
+    const x=npc; render(`<div class="backline"><button class="back" onclick="openNpc()">← Машина</button></div><div class="card"><div class="row"><b>${esc(x.name)}</b>${chip('GEMINI','good')}</div><div class="muted tiny">Продавец ${esc(x.seller_name)} • ${esc(x.seller_mood)}</div><div id="chat" class="chat">${chatMsg('model',`Здравствуйте! Цена ${fmt(x.asking_price)}. Можете предложить свою сумму.`)}</div><div class="chatbar"><input id="chatInput" maxlength="500" placeholder="Например: «Дам 2,1 млн»" onkeydown="if(event.key==='Enter')sendNpcChat()"><button class="btn primary" onclick="sendNpcChat()">➤</button></div></div>`, 'home','Торг');
+  }
+  async function sendNpcChat(){
+    const input=document.getElementById('chatInput'); if(!input)return; const text=input.value.trim(); if(!text)return; input.value=''; input.disabled=true; appendChat('user',text); chatState.history.push({role:'user',text});
+    try{ const j=await post('/api/npc/chat',{telegram_id:getContext().id,listing_id:npc.id,message:text,history:chatState.history.slice(-8)}); appendChat('model',j.reply); chatState.history.push({role:'model',text:j.reply}); if(j.counter_price)appendChat('model',`Встречная цена: ${fmt(j.counter_price)}`); if(j.accepted&&j.agreed_price){ chatState.agreed=j.agreed_price; appendChat('model',`✅ Можно покупать за ${fmt(j.agreed_price)}.`); document.getElementById('chat').insertAdjacentHTML('beforeend',`<div class="card"><button class="btn primary" onclick="buyNpcAgreed()">💰 Купить за ${fmt(j.agreed_price)}</button></div>`); }
+    }catch(e){appendChat('model',`⚠️ ${e.message}`)} finally{input.disabled=false;input.focus();}
+  }
+  async function buyNpcAgreed(){ if(!npc||!chatState.agreed)return; try{const j=await post('/api/npc/buy',{telegram_id:getContext().id,listing_id:npc.id,amount:Number(chatState.agreed),init_data:getContext().initData||null}); if(!j.ok){appendChat('model',j.reply||'Сделка не состоялась.');return;} player.balance=j.balance;player.cars=(player.cars||0)+1;player.reputation+=1;alertUser(`Машина в гараже!\n${fmt(j.agreed_price)}`);garage();}catch(e){alertUser(e.message);} }
+
+  async function garage(){
+    loading('🏠 Открываем гараж…');
+    try{ const cars=await api(`/api/cars?telegram_id=${getContext().id}`); let html=`<div class="section" style="margin-top:0"><h2>🏠 Гараж</h2><span>${cars.length} авто</span></div>`; if(!cars.length){html+=`<div class="card empty"><div class="emoji">🚘</div><h3>Гараж пуст</h3><p>Первая машина ждёт тебя на авторынке.</p><button class="btn primary" onclick="marketCars()">Открыть рынок</button></div>`;} else cars.forEach(c=>html+=garageCard(c)); render(html,'garage','Гараж');}
+    catch(e){alertUser(e.message);home();}
+  }
+  function garageCard(c){
+    return `<div class="card car-card">${c.photo?`<img class="photo" src="${esc(c.photo)}" alt="${esc(c.name)}">`:`<div class="photo" style="display:grid;place-items:center;font-size:54px">🚘</div>`}<div class="car-body"><div class="row"><div class="title">${esc(c.name)}</div>${c.listed?chip('НА ПРОДАЖЕ','gold'):chip(c.condition_text,c.condition>=75?'good':'pink')}</div><div class="specs">${chip(c.year)}${chip(km(c.mileage))}${chip(c.gearbox)}</div><div class="row"><span class="muted">Рынок</span><b>${fmt(c.market_price)}</b></div><div class="row"><span class="muted">Покупка</span><b>${fmt(c.purchase_price||c.asking_price)}</b></div><div class="btns">${c.listed?`<button class="btn" onclick="unlistCar(${c.id})">Снять с продажи</button>`:`<button class="btn" onclick="repairCar(${c.id})">🔧 Ремонт</button>`}${c.listed?'':`<button class="btn primary" onclick="sellCar(${c.id})">💰 Продать</button>`}</div>${c.number_id?`<button class="btn ghost" style="margin-top:8px" onclick="removePlate(${c.id})">🔢 Снять номер</button>`:''}</div></div>`;
+  }
+  async function repairCar(id){try{const j=await api(`/api/repair?car_id=${id}&telegram_id=${getContext().id}`,{method:'POST'});player.balance=j.balance;alertUser(`Ремонт выполнен за ${fmt(j.cost)}.`);garage();}catch(e){alertUser(e.message);}}
+  async function sellCar(id){const value=prompt('Цена продажи, ₽'); if(!value)return; const amount=Math.round(Number(String(value).replace(/\s/g,''))); if(!Number.isFinite(amount)||amount<=0)return alertUser('Введите корректную цену.'); try{await post(`/api/list-car?car_id=${id}&telegram_id=${getContext().id}`,{amount});alertUser('Машина выставлена на рынок.');garage();}catch(e){alertUser(e.message);}}
+  async function unlistCar(id){try{await api(`/api/unlist-car?car_id=${id}&telegram_id=${getContext().id}`,{method:'POST'});garage();}catch(e){alertUser(e.message);}}
+
+  async function profilePage(){
+    try{ const nums=await api(`/api/numbers?telegram_id=${getContext().id}`); const percent=Math.min(100,(player.reputation%5)*20+8); render(`<div class="card hero"><div class="big">👤</div><div class="title">${esc(player.username||'Игрок')}</div><div class="muted">Уровень ${player.level}</div><div class="capital">${fmt(player.balance)}</div><div class="progress"><i style="width:${percent}%"></i></div></div><div class="stats"><div class="stat"><small>Репутация</small><b>${player.reputation}</b></div><div class="stat"><small>Машины</small><b>${player.cars}</b></div><div class="stat"><small>Номера</small><b>${nums.length}</b></div><div class="stat"><small>Стартовый капитал</small><b>500 000 ₽</b></div></div><div class="btns"><button class="btn" onclick="myNumbers()">🔢 Мои номера</button><button class="btn" onclick="offers()">🤝 Сделки</button></div><div class="btns"><button class="btn primary" onclick="numberGet()">🚔 Получить номер</button><button class="btn" onclick="numberMarket()">🏪 Рынок номеров</button></div>`, 'profile','Профиль'); }catch(e){alertUser(e.message);}
+  }
+
+  async function numberGet(){ try{ const j=await post('/api/number',{telegram_id:getContext().id,username:getContext().name,init_data:getContext().initData||null}); player.balance=j.balance;player.numbers=(player.numbers||0)+1; alertUser(`Номер получен!\n${j.number.plate}\n${j.number.rarity}`); myNumbers(); }catch(e){alertUser(e.message);} }
+  async function myNumbers(){ try{ const a=await api(`/api/numbers?telegram_id=${getContext().id}`); let html=`<div class="section" style="margin-top:0"><h2>🔢 Мои номера</h2><span>${a.length}</span></div>`; if(!a.length){html+=`<div class="card empty"><div class="emoji">🔢</div><p>Номеров пока нет.</p></div>`;} else a.forEach(n=>{html+=`<div class="card"><div class="row"><div>${chip(n.rarity,n.rarity==='VIP'?'pink':(n.rarity==='Очень редкий'?'gold':''))}</div>${n.car_id?chip('УСТАНОВЛЕН','good'):''}</div><div style="margin:12px 0;text-align:center"><div class="plate">${esc(n.plate.split(' ')[0])} ${esc(n.plate.split(' ')[1])} ${esc(n.plate.split(' ')[2])}<span class="reg">${esc(n.plate.split(' ')[3]||'RUS')}</span></div></div><div class="row"><span class="muted">Оценка</span><b>${fmt(n.price)}</b></div>${n.car_id?'':`<button class="btn" style="margin-top:8px" onclick="listNumber(${n.id})">🏪 Выставить</button>`}</div>`}); render(html,'profile','Номера'); }catch(e){alertUser(e.message);} }
+  async function listNumber(id){const v=prompt('Цена продажи номера, ₽');if(!v)return;const amount=Math.round(Number(String(v).replace(/\s/g,'')));if(!Number.isFinite(amount)||amount<=0)return alertUser('Некорректная цена.');try{await post(`/api/list-number?number_id=${id}&telegram_id=${getContext().id}`,{amount});alertUser('Номер выставлен.');myNumbers();}catch(e){alertUser(e.message);}}
+  async function numberMarket(){ try{const a=await api(`/api/numbers?telegram_id=${getContext().id}&market=true`);let html=`<div class="section" style="margin-top:0"><h2>🔢 Рынок номеров</h2><span>${a.length}</span></div>`;if(!a.length)html+=`<div class="card empty"><div class="emoji">🔢</div><p>Пока никто не выставил номер.</p></div>`;a.forEach(n=>{html+=`<div class="card"><div style="text-align:center;margin:10px 0"><div class="plate">${esc(n.plate.split(' ')[0])} ${esc(n.plate.split(' ')[1])} ${esc(n.plate.split(' ')[2])}<span class="reg">${esc(n.plate.split(' ')[3]||'RUS')}</span></div></div><div class="row">${chip(n.rarity,n.rarity==='VIP'?'pink':'gold')}<b>${fmt(n.list_price)}</b></div><button class="btn primary" style="margin-top:8px" onclick="makeOffer(${n.id},${n.owner_id},'number',${n.list_price})">🤝 Предложить цену</button></div>`});render(html,'profile','Рынок номеров');}catch(e){alertUser(e.message);} }
+
+  async function makeOffer(assetId,sellerId,type,ask){const value=prompt('Ваше предложение, ₽',String(ask||''));if(!value)return;const amount=Math.round(Number(String(value).replace(/\s/g,'')));if(!Number.isFinite(amount)||amount<=0)return alertUser('Некорректная сумма.');try{await post('/api/offer',{seller_id:sellerId,buyer_id:player.id,car_id:type==='car'?assetId:null,number_id:type==='number'?assetId:null,amount});alertUser('Предложение отправлено владельцу.');offers();}catch(e){alertUser(e.message);}}
+  async function offers(){try{const a=await api(`/api/offers?telegram_id=${getContext().id}`);let html=`<div class="section" style="margin-top:0"><h2>🤝 Сделки</h2><span>${a.length}</span></div>`;if(!a.length)html+=`<div class="card empty"><div class="emoji">🤝</div><p>Активных сделок нет.</p></div>`;a.forEach(o=>{html+=`<div class="card"><div class="row"><b>${o.car_id?'🚘 Автомобиль':'🔢 Номер'} #${o.car_id||o.number_id}</b>${chip(o.incoming?'ВХОДЯЩЕЕ':'ИСХОДЯЩЕЕ',o.incoming?'good':'gold')}</div><div class="pricebox"><div class="price">${fmt(o.amount)}</div><div class="market">ID сделки: ${o.id}</div></div>${o.incoming?`<div class="btns"><button class="btn primary" onclick="acceptOffer(${o.id})">✅ Принять</button><button class="btn danger" onclick="rejectOffer(${o.id})">❌ Отклонить</button></div>`:`<button class="btn danger" style="margin-top:8px" onclick="rejectOffer(${o.id})">Отменить</button>`}</div>`});render(html,'profile','Сделки');}catch(e){alertUser(e.message);}}
+  async function acceptOffer(id){try{await api(`/api/offer/${id}/accept?telegram_id=${getContext().id}`,{method:'POST'});player=await post('/api/player',{telegram_id:getContext().id,username:getContext().name,init_data:getContext().initData||null});alertUser('Сделка завершена.');offers();}catch(e){alertUser(e.message);}}
+  async function rejectOffer(id){try{await api(`/api/offer/${id}/reject?telegram_id=${getContext().id}`,{method:'POST'});offers();}catch(e){alertUser(e.message);}}
+  async function installPlate(carId,numId){try{await api(`/api/plate/install?car_id=${carId}&number_id=${numId}&telegram_id=${getContext().id}`,{method:'POST'});alertUser('Номер установлен.');garage();}catch(e){alertUser(e.message);}}
+  async function removePlate(carId){try{await api(`/api/plate/remove?car_id=${carId}&telegram_id=${getContext().id}`,{method:'POST'});alertUser('Номер снят.');garage();}catch(e){alertUser(e.message);}}
+
+  window.home=home;window.init=init;window.marketCars=marketCars;window.openMarketListing=openMarketListing;window.openLink=openLink;window.sendChat=sendChat;window.buyAgreed=buyAgreed;window.findCar=findCar;window.openNpc=openNpc;window.inspectNpc=inspectNpc;window.openNpcChat=openNpcChat;window.sendNpcChat=sendNpcChat;window.buyNpcAgreed=buyNpcAgreed;window.garage=garage;window.repairCar=repairCar;window.sellCar=sellCar;window.unlistCar=unlistCar;window.profilePage=profilePage;window.numberGet=numberGet;window.myNumbers=myNumbers;window.listNumber=listNumber;window.numberMarket=numberMarket;window.makeOffer=makeOffer;window.offers=offers;window.acceptOffer=acceptOffer;window.rejectOffer=rejectOffer;window.installPlate=installPlate;window.removePlate=removePlate;
+  window.addEventListener('error', e => { console.error(e.error || e.message); });
+  async function boot(){
+    app.innerHTML = topbar('AUTO DEALER') + `<div class="loader">🔐<br><br>Подключаем Telegram…</div>`;
+    const ok = await loadTelegramWebApp();
+    if (tg) {
+      try { tg.ready?.(); tg.expand?.(); } catch {}
+    }
+    if (!ok && !tg) {
+      app.innerHTML = topbar('AUTO DEALER') + `<div class="card empty"><div class="emoji">📲</div><h3>Открой игру через Telegram</h3><p>Telegram WebApp не загрузился. Закрой это окно и снова открой AUTO DEALER кнопкой из бота.</p><button class="btn primary" onclick="location.reload()">Повторить</button></div>`;
+      return;
+    }
+    await init();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true}); else setTimeout(boot,0);
+})();
+</script>
+</body>
+</html>
