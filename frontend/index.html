@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#08090b">
-<title>AUTO DEALER • FINAL4</title>
+<title>AUTO DEALER • FINAL5</title>
 <link rel="icon" href="/favicon.svg">
 
 <style>
@@ -133,7 +133,7 @@ body{padding-bottom:82px}.app{width:min(100%,620px);margin:0 auto;padding:12px 1
       if(marketFilter.body_type) params.set('body_type', marketFilter.body_type);
       marketCache = await api(`/api/market?${params.toString()}`);
       renderMarket();
-    } catch(e){ alertUser(e.message); home(); }
+    } catch(e){ alertUser(e.message); render(`<div class="card empty"><div class="emoji">🚘</div><h3>Авторынок временно не загрузился</h3><p>Повтори попытку через несколько секунд.</p><button class="btn primary" onclick="marketCars()">Повторить</button></div>`,'market','Авторынок'); }
   }
 
   function renderMarket(){
@@ -287,10 +287,8 @@ body{padding-bottom:82px}.app{width:min(100%,620px);margin:0 auto;padding:12px 1
     if (tg) {
       try { tg.ready?.(); tg.expand?.(); } catch {}
     }
-    if (!ok && !tg) {
-      app.innerHTML = topbar('AUTO DEALER') + `<div class="card empty"><div class="emoji">📲</div><h3>Открой игру через Telegram</h3><p>Telegram WebApp не загрузился. Закрой это окно и снова открой AUTO DEALER кнопкой из бота.</p><button class="btn primary" onclick="location.reload()">Повторить</button></div>`;
-      return;
-    }
+    // Если библиотека Telegram временно недоступна, продолжаем в стабильном demo-профиле.
+    // Это не блокирует игру и позволяет открыть рынок даже при проблемах WebView с загрузкой telegram-web-app.js.
     await init();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true}); else setTimeout(boot,0);

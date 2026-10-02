@@ -15,7 +15,7 @@ async def start(message: types.Message):
         await message.answer("AUTO DEALER пока не настроен: отсутствует WEBAPP_URL.")
         return
     kb = InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="🚗 Открыть AUTO DEALER", web_app=WebAppInfo(url=WEBAPP_URL.rstrip("/") + "?v=final4"))
+        InlineKeyboardButton(text="🚗 Открыть AUTO DEALER", web_app=WebAppInfo(url=WEBAPP_URL.rstrip("/") + "?v=final5"))
     ]])
     await message.answer(
         "🚗 <b>AUTO DEALER</b>\n\n"

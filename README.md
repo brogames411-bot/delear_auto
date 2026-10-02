@@ -48,3 +48,6 @@ Telegram Mini App: авторынок, осмотр, AI-торг, гараж, р
 
 ## Final4 deployment
 After redeploy, send /start in Telegram and open the newest button. Old Telegram messages may keep an older URL.
+
+
+FINAL5: market is non-blocking, demo fallback works, external sync runs in background.

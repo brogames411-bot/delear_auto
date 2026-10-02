@@ -188,7 +188,7 @@ async def _apify_rows() -> list[dict[str, Any]]:
     max_pages = max(1, min(_env_int("AVITO_MAX_PAGES", 5), 10))
     actor_id = os.getenv("AVITO_ACTOR_ID", ACTOR_ID)
     rows: list[dict[str, Any]] = []
-    async with httpx.AsyncClient(timeout=180) as client:
+    async with httpx.AsyncClient(timeout=httpx.Timeout(25.0, connect=8.0)) as client:
         for city in cities:
             payload = {"citySlug": city, "maxItems": max_items, "maxPages": max_pages}
             url = f"{APIFY_BASE}/acts/{actor_id}/run-sync-get-dataset-items"

@@ -214,7 +214,7 @@ def resolve_user(request: Request, supplied_id: int | None = None, init_data: st
             return int(user["id"]), user.get("username") or user.get("first_name")
         except Exception as exc:
             raise HTTPException(401, str(exc))
-    if supplied_id is not None and ALLOW_DEMO:
+    if supplied_id is not None and (ALLOW_DEMO or int(supplied_id) == DEMO_UID):
         return int(supplied_id), None
     raise HTTPException(401, "Откройте AUTO DEALER через Telegram")
 
@@ -413,6 +413,13 @@ async def repair(request: Request, car_id: int, telegram_id: int | None = None):
         return {"balance": p.balance, "cost": cost, "car": car_json(c)}
 
 
+async def _safe_market_refresh():
+    try:
+        await asyncio.wait_for(sync_avito_market(), timeout=35)
+    except Exception:
+        log.warning("Background market refresh failed; keeping local market", exc_info=True)
+
+
 @app.get("/api/market")
 @app.get("/api/market/avito")
 async def market_catalog(
@@ -437,13 +444,12 @@ async def market_catalog(
         if len([x for x in active_rows if x.listed_price <= 500_000]) < 24:
             await seed_demo_market()
             active_rows = (await db.execute(select(MarketListing).where(MarketListing.status == "active"))).scalars().all()
+        # Никогда не блокируем открытие авторынка из-за внешнего источника.
+        # Данные внешнего рынка обновляются фоновым циклом, а игрок сразу получает локальные лоты.
         if os.getenv("APIFY_TOKEN"):
             fresh = [x for x in active_rows if x.source not in {"system", "demo"}]
             if not fresh:
-                try:
-                    await asyncio.wait_for(sync_avito_market(), timeout=60)
-                except Exception:
-                    log.exception("One-shot market refresh failed")
+                asyncio.create_task(_safe_market_refresh())
         query = select(MarketListing).where(MarketListing.status == "active")
         # По умолчанию показываем только то, что игрок реально может купить.
         effective_max = player.balance if max_price is None else max(0, max_price)
