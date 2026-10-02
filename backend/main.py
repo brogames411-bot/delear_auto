@@ -438,6 +438,8 @@ async def market_catalog(
     tg_id, _ = resolve_user(request, telegram_id)
     async with SessionLocal() as db:
         player = await get_player(db, tg_id)
+        if not player and tg_id == DEMO_UID:
+            player = await ensure_player(db, tg_id, "demo_player")
         if not player:
             raise HTTPException(404, "Игрок не найден")
         active_rows = (await db.execute(select(MarketListing).where(MarketListing.status == "active"))).scalars().all()

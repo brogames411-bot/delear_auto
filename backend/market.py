@@ -188,7 +188,7 @@ async def _apify_rows() -> list[dict[str, Any]]:
     max_pages = max(1, min(_env_int("AVITO_MAX_PAGES", 5), 10))
     actor_id = os.getenv("AVITO_ACTOR_ID", ACTOR_ID)
     rows: list[dict[str, Any]] = []
-    async with httpx.AsyncClient(timeout=httpx.Timeout(25.0, connect=8.0)) as client:
+    async with httpx.AsyncClient(timeout=httpx.Timeout(10.0, connect=5.0)) as client:
         for city in cities:
             payload = {"citySlug": city, "maxItems": max_items, "maxPages": max_pages}
             url = f"{APIFY_BASE}/acts/{actor_id}/run-sync-get-dataset-items"
@@ -200,8 +200,10 @@ async def _apify_rows() -> list[dict[str, Any]]:
                     if isinstance(row, dict) and row.get("itemId") and parse_money(row.get("price")):
                         row["_market_city"] = city
                         rows.append(row)
-            except Exception:
-                log.exception("Market sync failed for city %s", city)
+            except httpx.TimeoutException:
+                log.warning("Market sync timeout for city %s; using local market", city)
+            except Exception as exc:
+                log.warning("Market sync failed for city %s: %s", city, exc)
     unique: dict[str, dict[str, Any]] = {}
     for row in rows:
         key = f"{row.get('_market_city','')}:{row.get('itemId')}"
